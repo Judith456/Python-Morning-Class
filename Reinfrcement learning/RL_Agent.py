@@ -31,11 +31,11 @@ for episode in range(episodes):
         else:  # Move right
             new_state = min(4, state + 1)
 
-        # Reward: +1 if reached goal, else 0
-        reward = 1 if new_state == 4 else 0
+        # Reward: +1 if reached goal, else -0.1 for each step
+        reward = 1 if new_state == 4 else -0.1
 
         # Q-learning update rule
-        Q[state, action] = Q[state, action] + learning_rate * (
+        Q[state, action] += learning_rate * (
             reward + gamma * np.max(Q[new_state]) - Q[state, action]
         )
 
@@ -54,11 +54,11 @@ print("\nAgent's path to cross the road:")
 while state != 4:
     action = np.argmax(Q[state])  # Choose best action
     if action == 0:
-        state = max(0, state - 1)
         path.append("left")
+        state = max(0, state - 1)
     else:
-        state = min(4, state + 1)
         path.append("right")
+        state = min(4, state + 1)
     steps += 1
     print(f"Step {steps}: Move {actions[action]} → Position {state}")
 
